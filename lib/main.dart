@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:posts_bloc/bloc.dart';
+import 'package:posts_bloc/posts_repo.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,38 +28,37 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+      body: BlocProvider(
+        create: (context) {
+          return PostsBloc(postsRepository: PostsRepo());
+        },
+        child: BlocBuilder<PostsBloc, PostsState>(builder: (context, state) {
+          if (state is PostsLoading){
+            Text('Loading');
+          }
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  '$state',
+                ),
+                MaterialButton(
+                  child: Text('Load Posts'),
+                  onPressed: () async{
+                    BlocProvider.of<PostsBloc>(context).add(LoadPosts());
+                  },
+                ),
+              ],
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+          );
+        }),
       ),
     );
   }

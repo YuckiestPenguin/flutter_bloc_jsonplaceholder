@@ -7,6 +7,7 @@ abstract class PostsState extends Equatable {
   List<Object> get props => [];
 }
 
+class PostsInitial extends PostsState {}
 class PostsLoading extends PostsState {}
 
 class PostsLoaded extends PostsState {

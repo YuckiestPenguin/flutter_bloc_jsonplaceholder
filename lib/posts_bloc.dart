@@ -11,7 +11,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
   PostsBloc({@required this.postsRepository});
 
   @override
-  PostsState get initialState => PostsLoading();
+  PostsState get initialState => PostsInitial();
 
   @override
   Stream<PostsState> mapEventToState(PostsEvent event) async* {
@@ -22,6 +22,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
 
   Stream<PostsState> _mapLoadPostsToState() async* {
     try {
+      yield PostsLoading();
       final posts = await this.postsRepository.loadPosts();
       yield PostsLoaded(posts);
     } catch (_) {

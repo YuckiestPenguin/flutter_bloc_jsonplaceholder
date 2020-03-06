@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
@@ -11,8 +12,9 @@ class PostsRepo {
     };
 
     try {
-      final response = await http.get(url, headers: headers);
-      return response;
+      var response = await http.get(url, headers: headers);
+
+      return json.decode(response.body);
     } catch (error) {
       print(error);
     }
