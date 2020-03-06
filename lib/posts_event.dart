@@ -1,4 +1,10 @@
-import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
-@immutable
-abstract class PostsEvent {}
+abstract class PostsEvent extends Equatable {
+  const PostsEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class LoadPosts extends PostsEvent {}

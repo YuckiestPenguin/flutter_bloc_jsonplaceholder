@@ -1,15 +1,31 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import './bloc.dart';
+import 'package:meta/meta.dart';
+import 'package:posts_bloc/posts_event.dart';
+import 'package:posts_bloc/posts_repo.dart';
+import 'package:posts_bloc/posts_state.dart';
 
 class PostsBloc extends Bloc<PostsEvent, PostsState> {
-  @override
-  PostsState get initialState => InitialPostsState();
+  final PostsRepo postsRepository;
+
+  PostsBloc({@required this.postsRepository});
 
   @override
-  Stream<PostsState> mapEventToState(
-    PostsEvent event,
-  ) async* {
-    // TODO: Add Logic
+  PostsState get initialState => PostsLoading();
+
+  @override
+  Stream<PostsState> mapEventToState(PostsEvent event) async* {
+    if (event is LoadPosts) {
+      yield* _mapLoadPostsToState();
+    }
+  }
+
+  Stream<PostsState> _mapLoadPostsToState() async* {
+    try {
+      final posts = await this.postsRepository.loadPosts();
+      yield PostsLoaded(posts);
+    } catch (_) {
+      yield PostsNotLoaded();
+    }
   }
 }

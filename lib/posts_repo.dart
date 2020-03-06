@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class PostsRepo {
-  loadPosts() async {
+  Future loadPosts() async {
     String url = 'https://jsonplaceholder.typicode.com/posts';
 
     Map<String, String> headers = {

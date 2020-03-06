@@ -1,6 +1,24 @@
-import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
-@immutable
-abstract class PostsState {}
+abstract class PostsState extends Equatable {
+  const PostsState();
 
-class InitialPostsState extends PostsState {}
+  @override
+  List<Object> get props => [];
+}
+
+class PostsLoading extends PostsState {}
+
+class PostsLoaded extends PostsState {
+  final List posts;
+
+  const PostsLoaded([this.posts = const []]);
+
+  @override
+  List<Object> get props => [posts];
+
+  @override
+  String toString() => 'PostsLoaded { posts: $posts }';
+}
+
+class PostsNotLoaded extends PostsState {}
